@@ -18,8 +18,10 @@ var cfenv = require('cfenv');
 
 var path = require('path');
 var handlebars = require('handlebars');
-var hbs = require('hbs')
-var bodyParser = require('body-parser')
+var hbs = require('hbs');
+var bodyParser = require('body-parser');
+var fs = require('fs');
+var request = require('request');
 
 
 // create a new express server
@@ -105,12 +107,43 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 // var params = {
 //   start: 'now-1d',
 //   end: 'now',
-//   count: 10,
-//   return: "enriched.url.title"
+//   count: 1,
+//   return: "enriched.url.title",
 // };
+
+
+var options = { method: 'GET',
+  url: 'https://access.alchemyapi.com/calls/data/GetNews',
+  qs: 
+   { apikey: 'e159c11d8dda60a89823f4871028767ebecfe68b',
+     outputMode: 'json',
+     start: 'now-1d',
+     end: 'now',
+     return: 'enriched.url.title,enriched.url.text', 
+     count: 1,
+     'q.enriched.url.enrichedTitle.entities.entity': '|text=IBM,type=company|'},
+      headers: { 'content-type': 'application/json' } 
+
+};
+
+// console.log(options)
+
+request(options, function (error, response, body) {
+  if (!error && response.statusCode == 200) {  
+    // fullText = body.result.docs[0].source.enriched.url.text;
+    console.log(body);
+    // console.log(fullText)
+  }
+});
+
+
 
 // alchemy_data_news.getNews(params, function(err, res) {
 //   if(err)
 //     console.log(err)
 //   console.log(JSON.stringify(res, null, 2))
-// })
+//   fs.writeFile('news.txt', JSON.stringify(res, null, 2), function(err) {
+//     return console.log(err)
+//   });
+// });
+
