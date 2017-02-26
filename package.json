@@ -9,8 +9,10 @@
     "body-parser": "^1.16.1",
     "cfenv": "1.0.x",
     "express": "4.13.x",
+    "feedparser": "^2.1.0",
     "handlebars": "^4.0.6",
     "hbs": "^4.0.1",
+    "mongoose": "^4.8.4",
     "nodemon": "^1.11.0",
     "watson-developer-cloud": "^2.21.1"
   },

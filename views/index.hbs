@@ -64,15 +64,15 @@
 					<p>Cognitive Finance is a web based application built ontop of Node JS that leverages IBM Watson's AlchemyLanguage and AlchemyData NLP Libraries to provide sentiment analysis of both your investments
             and the macroeconomic environment at large</p>
 					<p>Please <a href="mailto:mjp529@gmail.com">email me</a> with any questions about the application and feel free to fork the application on my <a href="https://github.com/pszonkadonk/cognitive-finance">Github</a></p>
-          {{!--<ul>
+          <ul>
               {{#each items}} 
-                <li> {{@index}} || {{this.desc}}</li>
+                <li> {{@index}} || {{items.stockName}}</li>
               {{/each}}
           </ul>
-          <form action="/add" method="post">
+          {{!--<form action="/add" method="post">
       			<input type="text" name="newItem">
       			<input type="submit"> 
-    			</form>--}}		
+    			</form>		--}}
 				</div><!-- /col-lg-8 -->
 			</div><!-- /row -->
 	    </div> <!-- /container -->
@@ -93,90 +93,61 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td>SP500</td>
+					<td>SPY</td>
 					<td>S&P 500 Index</td>
 					<td>Good</td>
 					<td>So so</td>
 				</tr>
 				<tr>
-					<td>SP500</td>
-					<td>S&P 500 Index</td>
+					<td>IBM</td>
+					<td>International Business Machines</td>
 					<td>Good</td>
 					<td>So so</td>
 				</tr>
 				<tr>
-					<td>SP500</td>
-					<td>S&P 500 Index</td>
+					<td>TSLA</td>
+					<td>Tesla, Inc</td>
 					<td>Good</td>
 					<td>So so</td>
 				</tr>
 				<tr>
-					<td>SP500</td>
-					<td>S&P 500 Index</td>
+					<td>XOM</td>
+					<td>ExxonMobil</td>
 					<td>Good</td>
 					<td>So so</td>
 				</tr>
 				<tr>
-					<td>SP500</td>
-					<td>S&P 500 Index</td>
+					<td>AAPL</td>
+					<td>Apple</td>
 					<td>Good</td>
 					<td>So so</td>
 				</tr>
 				<tr>
-					<td>SP500</td>
-					<td>S&P 500 Index</td>
+					<td>JWN</td>
+					<td>Nordstrom</td>
 					<td>Good</td>
 					<td>So so</td>
 				</tr>
 				<tr>
-					<td>SP500</td>
-					<td>S&P 500 Index</td>
+					<td>BAC</td>
+					<td>Bank of America</td>
 					<td>Good</td>
 					<td>So so</td>
 				</tr>
 				<tr>
-					<td>SP500</td>
-					<td>S&P 500 Index</td>
+					<td>T</td>
+					<td>AT&T</td>
 					<td>Good</td>
 					<td>So so</td>
 				</tr>
 				<tr>
-					<td>SP500</td>
-					<td>S&P 500 Index</td>
+					<td>GM</td>
+					<td>General Motors</td>
 					<td>Good</td>
 					<td>So so</td>
 				</tr>
 			</tbody>
 		</table>
-
-		{{!--<div class="row mt centered">	
-			<div class="col-lg-4">
-				<a class="zoom green" href="work01.html"><img class="img-responsive" src="assets/img/portfolio/port01.jpg" alt="" /></a>
-				<p>APE</p>
-			</div>
-			<div class="col-lg-4">
-				<a class="zoom green" href="work01.html"><img class="img-responsive" src="assets/img/portfolio/port02.jpg" alt="" /></a>
-				<p>RAIDERS</p>
-			</div>
-			<div class="col-lg-4">
-				<a class="zoom green" href="work01.html"><img class="img-responsive" src="assets/img/portfolio/port03.jpg" alt="" /></a>
-				<p>VIKINGS</p>
-			</div>
-		</div><!-- /row -->
-		<div class="row mt centered">	
-			<div class="col-lg-4">
-				<a class="zoom green" href="work01.html"><img class="img-responsive" src="assets/img/portfolio/port04.jpg" alt="" /></a>
-				<p>YODA</p>
-			</div>
-			<div class="col-lg-4">
-				<a class="zoom green" href="work01.html"><img class="img-responsive" src="assets/img/portfolio/port05.jpg" alt="" /></a>
-				<p>EMPERORS</p>
-			</div>
-			<div class="col-lg-4">
-				<a class="zoom green" href="work01.html"><img class="img-responsive" src="assets/img/portfolio/port06.jpg" alt="" /></a>
-				<p>CHIEFS</p>
-			</div>
-		</div><!-- /row -->--}}
 	</div><!-- /container -->
 	
 	
