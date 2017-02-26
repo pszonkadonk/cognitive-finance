@@ -130,9 +130,7 @@ var options = { method: 'GET',
 
 request(options, function (error, response, body) {
   if (!error && response.statusCode == 200) {  
-    // fullText = body.result.docs[0].source.enriched.url.text;
     console.log(body);
-    // console.log(fullText)
   }
 });
 
