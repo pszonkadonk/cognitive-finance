@@ -66,55 +66,50 @@ var db = mongoose.connection;
 //     console.log(err);
 //   else
 //     console.log('Saved : ', data);
-// });
-
-// appleStock.save(function(err, data){
+// }).then(function() {
+//   appleStock.save(function(err, data){
 //   if(err)
 //     console.log(err);
 //   else
 //     console.log('Saved : ', data);
-// });
-
-// var myPortfolio = new Portfolio({
-//   stocks:[ibmStock, appleStock]
-// });
-
-
-
-
-// myPortfolio.save(function(err, data){
-//   if(err)
-//     console.log(err);
-//   else
-//     console.log('Saved : ', data);
+//   })
+// }).then(function() {
+//   var myPortfolio = new Portfolio({
+//   stocks: [ibmStock, appleStock]
+//   })
+//   myPortfolio.save(function(err, data){
+//       if(err)
+//         console.log(err);
+//       else {
+//         console.log("this is portfolio: ");
+//         console.log(myPortfolio);
+//         console.log('Saved : ', data);
+//       }
+//   }); 
 // });
 
 
 // routes
 
 
-// todoItems = [
-//   {id: 1, desc: "foo"},
-//   {id: 2, desc: "bar"},
-//   {id: 3, desc: "baz"},
-// ]
+items = getPortfolio();
 
 function getPortfolio() {
-  console.log("i got called");
-  Portfolio.findOne({'_id': '58b1dfafca28a41130a27f3e'}, function(err,portfolio) {
+  Portfolio.findById({'_id': '58b26a5a1f28881fa877d26a'}, function(err,portfolio) {
     if(err)
       console.log(err)
     else {
-      console.log("i got to else")
-      console.log(portfolio.stocks);
+      console.log("i got to else");
+      console.log(portfolio.stocks.length);
+      return portfolio.stocks;
      }
-  })
+  });
 }
 
 app.get('/', function(req, res) {
   res.render('index', {
     title: 'My App',
-    items: getPortfolio
+    items: getPortfolio()
   });
 });
 
@@ -162,52 +157,11 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 //   }
 // });
 
-<<<<<<< HEAD
-// Alchemy Data News Code
-
-// var params = {
-//   start: 'now-1d',
-//   end: 'now',
-//   count: 1,
-//   return: "enriched.url.title",
-// };
-
-
-var options = { method: 'GET',
-  url: 'https://access.alchemyapi.com/calls/data/GetNews',
-  qs: 
-   { apikey: 'e159c11d8dda60a89823f4871028767ebecfe68b',
-     outputMode: 'json',
-     start: 'now-1d',
-     end: 'now',
-     return: 'enriched.url.title,enriched.url.text', 
-     count: 1,
-     'q.enriched.url.enrichedTitle.entities.entity': '|text=IBM,type=company|'},
-      headers: { 'content-type': 'application/json' } 
-
-};
 
 // console.log(options)
 
-request(options, function (error, response, body) {
-  if (!error && response.statusCode == 200) {  
-    console.log(body);
-  }
-});
-
-
-
-// alchemy_data_news.getNews(params, function(err, res) {
-//   if(err)
-//     console.log(err)
-//   console.log(JSON.stringify(res, null, 2))
-//   fs.writeFile('news.txt', JSON.stringify(res, null, 2), function(err) {
-//     return console.log(err)
-//   });
-=======
 // feedparser.on('error', function (error) {
 //   console.log(error)
->>>>>>> a5b6981418d8a2532b4e4fe5a7f12a44b3f738be
 // });
 
 // feedparser.on('readable', function () {
