@@ -1,7 +1,8 @@
 # Node.js Cognitive Finance Application
 
-This application demonstrates a simple, reusable Node.js web application based on the Express framework.
-
+Cognitive Finance is a web based application built ontop of Node JS that leverages IBM Watson's AlchemyLanguage and AlchemyData NLP Libraries to provide sentiment analysis of both your investments
+            and the macroeconomic environment at large
+            
 [![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM-Bluemix/nodejs-helloworld)
 
 ## Run the app locally
