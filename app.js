@@ -51,6 +51,10 @@ app.use(bodyParser());
 mongoose.connect('mongodb://localhost/myapp');
 var db = mongoose.connection;
 
+
+// populate database with a portfolio with stocks
+
+
 // var ibmStock = new Stock({
 //   stockName: 'International Business Machines',
 //   stockTicker: 'IBM'
@@ -89,27 +93,26 @@ var db = mongoose.connection;
 // });
 
 
+
+
+//get portfolio
+
+function getStockPortfolio(id) {
+  var portfolioPromise = Portfolio.findById({'_id': id}).populate('stocks').exec(function(err, stocks) {
+  });
+  return portfolioPromise;
+} 
+
+
+
 // routes
 
-
-items = getPortfolio();
-
-function getPortfolio() {
-  Portfolio.findById({'_id': '58b26a5a1f28881fa877d26a'}, function(err,portfolio) {
-    if(err)
-      console.log(err)
-    else {
-      console.log("i got to else");
-      console.log(portfolio.stocks.length);
-      return portfolio.stocks;
-     }
-  });
-}
-
 app.get('/', function(req, res) {
-  res.render('index', {
-    title: 'My App',
-    items: getPortfolio()
+  getStockPortfolio('58b26a5a1f28881fa877d26a').then(function(portfolio){
+      res.render('index', {
+      title: 'My App',
+      portfolio: portfolio
+    });
   });
 });
 
