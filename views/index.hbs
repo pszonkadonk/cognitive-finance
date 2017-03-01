@@ -64,15 +64,6 @@
 					<p>Cognitive Finance is a web based application built ontop of Node JS that leverages IBM Watson's AlchemyLanguage and AlchemyData NLP Libraries to provide sentiment analysis of both your investments
             and the macroeconomic environment at large</p>
 					<p>Please <a href="mailto:mjp529@gmail.com">email me</a> with any questions about the application and feel free to fork the application on my <a href="https://github.com/pszonkadonk/cognitive-finance">Github</a></p>
-          <ul>
-              {{#each portfolio.stocks}} 
-                <li>{{stockName}} </li>
-              {{/each}}
-          </ul>
-          <form action="/add" method="post">
-      			<input type="text" name="newItem">
-      			<input type="submit"> 
-    			</form>		
 				</div><!-- /col-lg-8 -->
 			</div><!-- /row -->
 	    </div> <!-- /container -->
@@ -92,60 +83,12 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>SPY</td>
-					<td>S&P 500 Index</td>
-					<td>Good</td>
-					<td>So so</td>
-				</tr>
-				<tr>
-					<td>IBM</td>
-					<td>International Business Machines</td>
-					<td>Good</td>
-					<td>So so</td>
-				</tr>
-				<tr>
-					<td>TSLA</td>
-					<td>Tesla, Inc</td>
-					<td>Good</td>
-					<td>So so</td>
-				</tr>
-				<tr>
-					<td>XOM</td>
-					<td>ExxonMobil</td>
-					<td>Good</td>
-					<td>So so</td>
-				</tr>
-				<tr>
-					<td>AAPL</td>
-					<td>Apple</td>
-					<td>Good</td>
-					<td>So so</td>
-				</tr>
-				<tr>
-					<td>JWN</td>
-					<td>Nordstrom</td>
-					<td>Good</td>
-					<td>So so</td>
-				</tr>
-				<tr>
-					<td>BAC</td>
-					<td>Bank of America</td>
-					<td>Good</td>
-					<td>So so</td>
-				</tr>
-				<tr>
-					<td>T</td>
-					<td>AT&T</td>
-					<td>Good</td>
-					<td>So so</td>
-				</tr>
-				<tr>
-					<td>GM</td>
-					<td>General Motors</td>
-					<td>Good</td>
-					<td>So so</td>
-				</tr>
+				{{#each portfolio.stocks}}
+					<tr>
+							<td>{{stockName}}</td>
+							<td>{{stockTicker}}</td>
+					<tr>
+				{{/each}}
 			</tbody>
 		</table>
 	</div><!-- /container -->
@@ -160,8 +103,8 @@
 					<h4>Office</h4>
 					<p>
 						Some Address 987,<br/>
-						+34 9054 5455, <br/>
-						Madrid, Spain.
+						123-456-7890, <br/>
+						Wayne, NJ.
 					</p>
 				</div><!-- /col-lg-4 -->
 				

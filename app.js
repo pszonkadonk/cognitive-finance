@@ -108,7 +108,7 @@ function getStockPortfolio(id) {
 // routes
 
 app.get('/', function(req, res) {
-  getStockPortfolio('58b26a5a1f28881fa877d26a').then(function(portfolio){
+  getStockPortfolio('58b6fb68ac588b03495ab559').then(function(portfolio){
       res.render('index', {
       title: 'My App',
       portfolio: portfolio
