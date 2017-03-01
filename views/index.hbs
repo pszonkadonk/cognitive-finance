@@ -72,7 +72,7 @@
 	
 	<!-- +++++ Projects Section +++++ -->
 	
-	<div class="container pt">
+	<div class="container">
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -83,12 +83,17 @@
 				</tr>
 			</thead>
 			<tbody>
-				{{#each portfolio.stocks}}
-					<tr>
-							<td>{{stockName}}</td>
-							<td>{{stockTicker}}</td>
-					<tr>
-				{{/each}}
+				{{#this.stocks}}
+				<tr>
+					<td>{{stockTicker}}</td>
+					<td>{{stockName}}</td>
+					<td>hello</td>
+				{{/this.stocks}}
+				{{#this.sentiment}}
+					<td>{{this}}</td>
+				{{/this.sentiment}}
+				</tr>
+
 			</tbody>
 		</table>
 	</div><!-- /container -->

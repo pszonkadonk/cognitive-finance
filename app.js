@@ -13,13 +13,14 @@ var alchemy_language = new AlchemyLanguage(alchemyApiKey)
 
 // cfenv provides access to your Cloud Foundry environment
 var cfenv = require('cfenv');
+
 var path = require('path');
 var handlebars = require('handlebars');
 var hbs = require('hbs');
 var bodyParser = require('body-parser');
-var fs = require('fs');
 var request = require('request');
 var Feedparser = require('feedparser');
+var sentiment = require('./sentiment');
 
 // database and schemas
 var mongoose = require('mongoose');
@@ -103,16 +104,47 @@ function getStockPortfolio(id) {
   return portfolioPromise;
 } 
 
-
-
+foo = getStockPortfolio("58b723c445014b17633932b2").then(function(val) {
+  b = val.stocks;
+  b.forEach(function(part, index, arr){
+    bar = Stock.findById({"_id": part._id}).lean().exec(function(err, stock) {
+      return JSON.stringify(stock);
+    }).then(function(p){
+      p.sentiment = 1;
+      console.log(p)
+    });
+  });
+});
 // routes
 
 app.get('/', function(req, res) {
-  getStockPortfolio('58b6fb68ac588b03495ab559').then(function(portfolio){
+  getStockPortfolio('58b723c445014b17633932b2').then(function(port){
+    sentimentArray = [1,2];
+
+    foo = port.stocks
+
+
+    // sentimentArray = [
+    //   {
+    //   a: "hello",
+    //   b: "goodbye"
+    // },
+    // {
+    //   a: "buenos",
+    //   b: "dias"
+    // }
+    // ];
+    // portfolio.stocks.forEach(function(stock) {
+    //   sentimentArray.push(sentiment.getSentiment(stock.stockTicker,stock.stockName));
+    // });
+
+    console.log(sentimentArray);
+    
       res.render('index', {
-      title: 'My App',
-      portfolio: portfolio
-    });
+        title: 'My App',
+        stocks: port.stocks,
+        sentiment: sentimentArray
+      });
   });
 });
 
@@ -140,48 +172,3 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 
 // Alchemy Code for Sentiment Analysis
 
-
-// var params = 'http://finance.yahoo.com/rss/headline?s=IBM';
-
-// stockReq = request(params);
-// var feedparser = new Feedparser([params])
-
-// stockReq.on('error', function (error) {
-//   console.log(error)
-// });
-
-// stockReq.on('response', function (res) {
-//   var stream = this; // `this` is `req`, which is a stream
-//   if (res.statusCode !== 200) {
-//     this.emit('error', new Error('Bad status code'));
-//   }
-//   else {
-//     stream.pipe(feedparser);
-//   }
-// });
-
-
-// console.log(options)
-
-// feedparser.on('error', function (error) {
-//   console.log(error)
-// });
-
-// feedparser.on('readable', function () {
-//   // This is where the action is!
-//   var stream = this; // `this` is `feedparser`, which is a stream
-//   var meta = this.meta; // **NOTE** the "meta" is always available in the context of the feedparser instance
-//   var item;
-
-//   while (item = stream.read()) {
-//     params = {
-//       url: item.link
-//     };
-//     alchemy_language.sentiment(params, function(err, res) {
-//       if(err)
-//         console.log('error', err)
-//       else 
-//         console.log(JSON.stringify(res, null, 2));
-//     });
-//   }
-// });
