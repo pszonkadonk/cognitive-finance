@@ -84,16 +84,13 @@
 			</thead>
 			<tbody>
 				{{#this.stocks}}
-				<tr>
-					<td>{{stockTicker}}</td>
-					<td>{{stockName}}</td>
-					<td>hello</td>
+					<tr>
+						<td>{{stockTicker}}</td>
+						<td>{{stockName}}</td>
+						<td>{{sentiment}}</td>
+					</tr>
 				{{/this.stocks}}
-				{{#this.sentiment}}
-					<td>{{this}}</td>
-				{{/this.sentiment}}
 				</tr>
-
 			</tbody>
 		</table>
 	</div><!-- /container -->

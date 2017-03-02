@@ -1,14 +1,14 @@
-var mongoose = require('mongoose');
-var Stock = require('./stock');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Stock = require('./stock');
+const Schema = mongoose.Schema;
 
-var portfolioSchema = new Schema({
+let portfolioSchema = new Schema({
     stocks: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Stock'
     }]
 }); 
 
-var Portfolio = mongoose.model('Portfolio', portfolioSchema);
+let Portfolio = mongoose.model('Portfolio', portfolioSchema);
 
 module.exports = Portfolio;

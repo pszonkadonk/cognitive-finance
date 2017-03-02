@@ -1,11 +1,11 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var stockSchema = new Schema({
+let stockSchema = new Schema({
     stockName: String,
     stockTicker: String
 })
 
-var Stock = mongoose.model('Stock', stockSchema)
+let Stock = mongoose.model('Stock', stockSchema)
 
 module.exports = Stock;
