@@ -83,13 +83,13 @@
 				</tr>
 			</thead>
 			<tbody>
-				{{#this.stocks}}
+				{{#each stocks}}
 					<tr>
-						<td>{{stockTicker}}</td>
-						<td>{{stockName}}</td>
-						<td>{{sentiment}}</td>
+						<td>{{this.stockTicker}}</td>
+						<td>{{this.stockName}}</td>
+						<td>{{this.sentiment}}</td>
 					</tr>
-				{{/this.stocks}}
+				{{/each}}
 				</tr>
 			</tbody>
 		</table>

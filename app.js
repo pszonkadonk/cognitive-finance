@@ -19,12 +19,13 @@ const handlebars = require('handlebars');
 const hbs = require('hbs');
 const bodyParser = require('body-parser');
 const request = require('request');
-const Feedparser = require('feedparser');
-const sentiment = require('./sentiment');
+const feedparser = require('feedparser-promised');
+const async = require('async');
+const fs = require('fs');
+const Q = require('q');
 
 // database and schemas
 const mongoose = require('mongoose');
-const Portfolio = require('./model/portfolio');
 const Stock = require('./model/stock')
 
 
@@ -53,116 +54,116 @@ mongoose.connect('mongodb://localhost/myapp');
 const db = mongoose.connection;
 
 
-// populate database with a portfolio with stocks
+function myStockUpdate(id) {
+
+  Stock.findById(id, function(err, stock) {
+    if(err){ 
+      console.log(err);
+    }
+    params = {
+      url: "http://www.huffingtonpost.com/2010/06/22/iphone-4-review-the-worst_n_620714.html"
+    };
+
+    var sentiment = Q.denodeify(alchemy_language.sentiment.bind(alchemy_language));
 
 
-// let ibmStock = new Stock({
-//   stockName: 'International Business Machines',
-//   stockTicker: 'IBM'
-// });
+    a = sentiment(params);
 
-// let appleStock = new Stock({
-//   stockName: 'Apple',
-//   stockTicker: 'AAPL'
-// });
-
-// ibmStock.save((err, data) => {
-//   if(err)
-//     console.log(err);
-//   else
-//     console.log('Saved : ', data);
-// }).then(() => {
-//   appleStock.save((err, data) => {
-//   if(err)
-//     console.log(err);
-//   else
-//     console.log('Saved : ', data);
-//   })
-// }).then(() => {
-//   let myPortfolio = new Portfolio({
-//   stocks: [ibmStock, appleStock]
-//   })
-//   myPortfolio.save((err, data) =>{
-//       if(err)
-//         console.log(err);
-//       else {
-//         console.log("this is portfolio: ");
-//         console.log(myPortfolio);
-//         console.log('Saved : ', data);
-//       }
-//   }); 
-// });
-
-
-
-
-//get portfolio
-
-function getStockPortfolio(id) {
-  let portfolioPromise = Portfolio.findById({'_id': id}).populate('stocks').exec((err, stocks) => {
+    b = a.then(function(returnVal) {
+      console.log("This is b")
+      console.log(returnVal);
+      return Promise.resolve(returnVal.docSentiment.score);
+    }).then(function(t) {
+        stock.sentiment = parseFloat(t);
+        stock.save(function(err, updatedStock){
+        if(err) {
+          console.log(err);
+        }
+        else {
+          console.log("updated stock");
+        }
+      });
+    });
   });
-  return portfolioPromise;
-} 
+}
 
-// foo = getStockPortfolio("58b723c445014b17633932b2").then((portfolio) =>{
-//   myArray = []
-//   portfolio.stocks.forEach((element) => {
-//     // console.log(element)
-//     element = element.toObject();
-//     element.sentiment = 1;
-//     // console.log(element);
-//     myArray.push(element);
-//   });
-//  return(myArray);
-// })
+// myStockUpdate("58b9a69b871891324526069a");
 
-// foo = getStockPortfolio("58b723c445014b17633932b2").then((val) => {
-//   b = val.stocks;
-//   b.forEach((part, index, arr) =>{
-//     bar = Stock.findById({"_id": part._id}).lean().exec((err, stock) => {
-//       return JSON.stringify(stock);
-//     }).then((p) =>{
-//       p.sentiment = 1;
-//       console.log(p)    // this will allow mongoose objects to be altered.
-//     });
-//   });
-// });
+function getFeed(ticker) {
+  const options = {
+    uri: `http://finance.yahoo.com/rss/headline?s=${ticker}`,
+    timeout: 3000
+  };
+  return feedparser.parse(options)
+}
+
+function multipleSentiments(link) {
+  console.log("multipleSentiments got c alled");
+  param = {
+    url: link
+  }
+  alchemy_language.sentiment(param, function(err, response) {
+    console.log(JSON.stringify(response, null,2));
+    // fs.appendFile("test.txt", JSON.stringify(response,null,2), function(err) {
+    //   if(err){
+    //     console.log(err);
+    //   }
+    //   else {
+    //     console.log("wrote to file");
+    //   }
+    // });
+  });
+}
 
 
 
-  
-  
+foo = getFeed('IBM').then(function(returnedFeed) {
+  var arr = []
+  // console.log("From foo");
+  returnedFeed.forEach(function(element) {
+    arr.push(element.link);
+    // console.log(element.summary);
+  });
+  return Promise.resolve(arr.slice(1,3));
+});
+
+baz = foo.then(function(theArray){
+  console.log(theArray.length)
+  // var sentiment = Q.denodeify(alchemy_language.sentiment.bind(alchemy_language));
+  async.each(theArray, function(link, callback){
+    multipleSentiments(link);
+    callback(null);
+  }), function(err) {
+    if(err) {
+      console.log(err);
+    }
+    else {
+      console.log("God done processing");
+    }
+  }
+});
 
 
 // routes
 
-app.get('/', (req, res) => {
-  getStockPortfolio('58b723c445014b17633932b2').then((port) =>{  
-    myArray = []; 
-    port.stocks.forEach((element) => {
-    // console.log(element)
-    element = element.toObject();
-    // console.log(element.stockTicker);
-    // console.log(element.stockName);
-    element.sentiment = sentiment.getSentiment(element.stockTicker, element.stockName);
-    // console.log(element.sentiment);
-    myArray.push(element);
-  });
-    res.render('index', {
-      title: 'My App',
-      stocks: myArray
+app.get('/', function(req, res) {
+  Stock.find({}, function(err, stocks) {
+    var stockMap = {};
+
+    stocks.forEach(function(stock){
+      stockMap[stock._id] = stock;
+    });
+  console.log(stockMap);
+    res.render(
+      'index', {
+        title: "Welcome",
+        stocks: stockMap
     });
   });
 });
 
-app.post('/add', (req, res) => {
-  let newItem = req.body.newItem;
-  todoItems.push({
-    id: todoItems.length + 1,
-    desc: newItem
-  });
-  res.redirect('/')
-});
+
+
 
 
 
@@ -171,10 +172,3 @@ app.listen(appEnv.port, '0.0.0.0', () => {
   // print a message when the server starts listening
   console.log("server starting on " + appEnv.url);
 });
-
-
-
-
-
-
-// Alchemy Code for Sentiment Analysis

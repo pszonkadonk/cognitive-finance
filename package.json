@@ -6,14 +6,18 @@
     "start": "nodemon app.js"
   },
   "dependencies": {
+    "async": "^2.1.5",
     "body-parser": "^1.16.1",
     "cfenv": "1.0.x",
     "express": "4.13.x",
     "feedparser": "^2.1.0",
+    "feedparser-promised": "^1.2.1",
     "handlebars": "^4.0.6",
     "hbs": "^4.0.1",
     "mongoose": "^4.8.4",
     "nodemon": "^1.11.0",
+    "q": "^1.4.1",
+    "request-promise": "^4.1.1",
     "watson-developer-cloud": "^2.21.1"
   },
   "repository": {},
