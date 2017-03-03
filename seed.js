@@ -1,6 +1,6 @@
 let ibmStock = new Stock({
   stockName: 'International Business Machines',
-  stockTicker: 'IBM'
+  stockTicker: 'IBM',
 });
 
 let appleStock = new Stock({

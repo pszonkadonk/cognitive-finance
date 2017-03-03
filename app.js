@@ -64,6 +64,23 @@ function myStockUpdate(id) {
       url: "http://www.huffingtonpost.com/2010/06/22/iphone-4-review-the-worst_n_620714.html"
     };
 
+    feed = getFeed(stock.stockTicker);
+
+    articleLinks = feed.then(function(articles) {
+      var linkArr = [];
+      articles.forEach(function(article) {
+        linkArr.push(articles.link);
+      });
+      return Promise.resolve(linkArr);
+    });
+
+    sentimentsArray = articleLinks.then(function(links){
+      async.each(links, function(link, callback){
+        multipleSentiments(link);
+        callback(null);
+      })
+    })
+
     var sentiment = Q.denodeify(alchemy_language.sentiment.bind(alchemy_language));
 
 
@@ -98,12 +115,15 @@ function getFeed(ticker) {
 }
 
 function multipleSentiments(link) {
-  console.log("multipleSentiments got c alled");
+  var returnVal = 0;
+  console.log("multipleSentiments got called");
   param = {
     url: link
   }
+
   alchemy_language.sentiment(param, function(err, response) {
-    console.log(JSON.stringify(response, null,2));
+    console.log(JSON.stringify(response, null, 2));
+
     // fs.appendFile("test.txt", JSON.stringify(response,null,2), function(err) {
     //   if(err){
     //     console.log(err);
@@ -112,7 +132,8 @@ function multipleSentiments(link) {
     //     console.log("wrote to file");
     //   }
     // });
-  });
+  });  
+
 }
 
 
@@ -131,7 +152,7 @@ baz = foo.then(function(theArray){
   console.log(theArray.length)
   // var sentiment = Q.denodeify(alchemy_language.sentiment.bind(alchemy_language));
   async.each(theArray, function(link, callback){
-    multipleSentiments(link);
+    a = multipleSentiments(link);
     callback(null);
   }), function(err) {
     if(err) {
@@ -149,6 +170,7 @@ baz = foo.then(function(theArray){
 app.get('/', function(req, res) {
   Stock.find({}, function(err, stocks) {
     var stockMap = {};
+  
 
     stocks.forEach(function(stock){
       stockMap[stock._id] = stock;
