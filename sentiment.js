@@ -2,7 +2,26 @@ const AlchemyLanguage = require('watson-developer-cloud/alchemy-language/v1');
 const alchemyApiKey = {api_key: process.env.ALCHEMY_API_KEY || 'e159c11d8dda60a89823f4871028767ebecfe68b'}
 const alchemy_language = new AlchemyLanguage(alchemyApiKey)
 
+const async = require('async');
+const Q = require('q');
+
 const Stock = require('./models/Stock');
+
+function multipleSentiments(url) {
+    let param = {
+        url: url
+    }
+    console.log("here i am");
+    let sentiment = Q.denodeify(alchemy_language.sentiment.bind(alchemy_language));
+
+    return(sentiment(param));
+}
+
+
+
+
+
+
 
 function getSentiment(id) {
     let params = {
