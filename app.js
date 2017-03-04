@@ -65,9 +65,6 @@ let articles = feed.then((content)=> {
         content.forEach(function(article) {
             contentArray.push(article.link);
         });
-        // content.forEach(function(article) {
-        //     console.log(article.link);
-        // });
         resolve(contentArray);
     });
 });
