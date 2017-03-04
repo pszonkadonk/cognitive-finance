@@ -45,11 +45,16 @@ function getFeed() {
     })
 }
 
+
   
 
-let feed = getFeed().then((val)=> {
-    val.forEach(function(article) {
-        console.log(article.link);
-    });
+// let feed = getFeed().then((val)=> {
+//     val.forEach(function(article) {
+//         console.log(article.link);
+//     });
 
-})
+// })
+
+module.exports = {
+    getFeed: getFeed
+}

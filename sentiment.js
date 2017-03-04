@@ -7,14 +7,22 @@ const Q = require('q');
 
 const Stock = require('./models/Stock');
 
-function multipleSentiments(url) {
-    let param = {
-        url: url
-    }
-    console.log("here i am");
-    let sentiment = Q.denodeify(alchemy_language.sentiment.bind(alchemy_language));
+function multipleSentiments(articles) {
 
-    return(sentiment(param));
+    async.forEach(articles, (link, callback) => {
+        // console.log(link);
+        alchemy_language.sentiment(link, (error, alchemyResponse) => {
+            if(error) {
+                console.log("what i got; " + link.url);
+                console.log(error)
+            }
+            else {
+                console.log(alchemyResponse)
+            }
+        });
+        callback();
+    });
+    // return(sentiment(param));
 }
 
 
@@ -47,6 +55,19 @@ function getSentiment(id) {
     });
 }
 
+function resetSentiment(id) {
+    Stock.findByIdAndUpdate(id, { sentiment: 0 }, (err, res) => {
+        if(err) {
+            console.log(err);
+        }
+        else {
+            console.log("updated sentiment of " + res.name);
+        }
+    });
+}
+
 module.exports = {
-    getSentiment: getSentiment
+    getSentiment: getSentiment,
+    resetSentiment: resetSentiment,
+    multipleSentiments: multipleSentiments
 }
