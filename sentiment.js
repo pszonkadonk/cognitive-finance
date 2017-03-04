@@ -1,28 +1,33 @@
 const AlchemyLanguage = require('watson-developer-cloud/alchemy-language/v1');
 const alchemyApiKey = {api_key: process.env.ALCHEMY_API_KEY || 'e159c11d8dda60a89823f4871028767ebecfe68b'}
-const alchemy_language = new AlchemyLanguage(alchemyApiKey);
-const request = require('request');
-const rp = require('request-promise');
-const feedparser = require('feedparser-promised');
-const Q = require('q');
+const alchemy_language = new AlchemyLanguage(alchemyApiKey)
 
+const Stock = require('./models/Stock');
 
-
-function parseRss(rss) {
-    let options = {
-        uri: `http://finance.yahoo.com/rss/headline?s=${rss}`
-    }; 
-    console.log("I got called by" + rss);
-
-    return feedparser.parse(options);
+function getSentiment(id) {
+    let params = {
+    url: "https://www.nytimes.com/2017/03/03/opinion/paul-ryans-misguided-sense-of-freedom.html?ref=opinion" 
+    }  
+ 
+     alchemy_language.sentiment(params, function(err, alchemyResponse) {
+        if(err) {
+            console.log(err);
+        }
+        else {
+            Stock.findByIdAndUpdate(id,
+             { sentiment: alchemyResponse.docSentiment.score }, {new: true}).exec((err,stock) => {
+                if(err) {
+                     console.log(err)
+                 }
+                 else {
+                     console.log("Updated stock");
+                     console.log(JSON.stringify(stock, null, 2));
+                 }
+             });
+        }
+    });
 }
 
-// function getSentiment(ticker, name) {
-
-  
-// }
-
-
 module.exports = {
-    parseRss: parseRss
-};
+    getSentiment: getSentiment
+}
