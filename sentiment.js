@@ -24,7 +24,8 @@ function getSentiment(linkObject) {
             if(err) {
                 console.log(err);
             }
-            else {
+
+            else if(alchemyResponse.docSentiment.type !== 'neutral') {
                 Stock.findOneAndUpdate({ticker: 'IBM'},
                 { $inc: {sentiment: alchemyResponse.docSentiment.score} }, {new: true}).exec((err,stock) => {
                     if(err) {

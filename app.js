@@ -56,36 +56,56 @@ app.use(bodyParser());
 // sentiment.resetSentiment("58ba2b1195244e589eedcefd");
 
 
-let feed = feedparser.getFeed();
+const urls = [
+    "http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=IBM",
+    "http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=AAPL",
+    "http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=MSFT"
+];  
 
-let articles = feed.then((content)=> {
-    return new Promise((resolve, reject) => {
-        let contentArray = []
-        console.log("got the feed");
-        content.forEach(function(article) {
-            contentArray.push(article.link);
-        });
-        resolve(contentArray);
-    });
-});
-
-let articlesAsObject = articles.then((links) => {
-    return new Promise((resolve, reject) => {
-        let objectArray = []
-        links.forEach(function(l) {
-            objectArray.push({
-                url: l
-            });
-        });
-        resolve(objectArray);
-    });
-});
-
-
-let sentimentAnalysis = articlesAsObject.then((linkObjects) => {
-    let aSlice = linkObjects.slice(1,4);
-    sentiment.multipleSentiments(aSlice);
+Promise.all([
+    feedparser.getFeed("http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=IBM"),
+    feedparser.getFeed("http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=AAPL"),
+    feedparser.getFeed("http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=MSFT")
+]).then((feeds) => {
+    console.log(feeds.length);
+    // feeds.forEach(function(feed) {
+    //     console.log(feed);
+    //     console.log("---------------");
+    //     console.log("\n\n\n\n\n\n\n\n\n\n");
+    //     console.log("---------------");
+    // });
 })
+
+// let feed = feedparser.getFeed();
+
+// let articles = feed.then((content)=> {
+//     return new Promise((resolve, reject) => {
+//         let contentArray = []
+//         console.log("got the feed");
+//         content.forEach(function(article) {
+//             contentArray.push(article.link);
+//         });
+//         resolve(contentArray);
+//     });
+// });
+
+// let articlesAsObject = articles.then((links) => {
+//     return new Promise((resolve, reject) => {
+//         let objectArray = []
+//         links.forEach(function(l) {
+//             objectArray.push({
+//                 url: l
+//             });
+//         });
+//         resolve(objectArray);
+//     });
+// });
+
+
+// let sentimentAnalysis = articlesAsObject.then((linkObjects) => {
+//     let aSlice = linkObjects.slice(1,4);
+//     sentiment.multipleSentiments(aSlice);
+// })
 
 
 

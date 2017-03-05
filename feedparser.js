@@ -2,22 +2,14 @@ var FeedParser = require('feedparser');
 var request = require('request'); // for fetching the feed
 const async = require('async')
 
-const urls = [
-    "http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=IBM",
-    "http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=AAPL",
-    "http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=MSFT"
-];  
 
-
-
-function getFeed() {
+function getFeed(url) {
     let contentArr = []
-    var req = request('http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=IBM')
-    // var req = request(url);
+    // var req = request('http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=IBM')
+    var req = request(url);
     var feedparser = new FeedParser();
 
    
-
     return new Promise((resolve, reject) => {
         req.on('error', function (error) {
     // handle any request errors
@@ -52,10 +44,10 @@ function getFeed() {
         });
 
         feedparser.on('end', (()=>{
-            console.log(contentArr);
+            // console.log(contentArr);
             resolve(contentArr);
         }));
-    })
+    });
 }
 
 
