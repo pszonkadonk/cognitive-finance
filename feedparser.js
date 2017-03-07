@@ -12,7 +12,8 @@ function getFeed(url) {
    
     return new Promise((resolve, reject) => {
         req.on('error', function (error) {
-    // handle any request errors
+            console.log("Error on requesting page");
+    
         });
 
         req.on('response', function (res) {
@@ -27,6 +28,7 @@ function getFeed(url) {
         });
 
         feedparser.on('error', function (error) {
+            console.log("error on requesting rss feed");
         // always handle errors
         });
 
