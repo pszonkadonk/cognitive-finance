@@ -1,119 +1,58 @@
-const express = require('express');
-const AlchemyLanguage = require('watson-developer-cloud/alchemy-language/v1');
-const alchemyApiKey = {api_key: process.env.ALCHEMY_API_KEY || 'e159c11d8dda60a89823f4871028767ebecfe68b'}
-const alchemy_language = new AlchemyLanguage(alchemyApiKey)
-
-// cfenv provides access to your xCloud Foundry environment
-const cfenv = require('cfenv');
-
-
-
-const async = require('async');
-const bodyParser = require('body-parser');
-const handlebars = require('handlebars');
-const hbs = require('hbs');
-const path = require('path');
-const Q = require('q');
-
+const express = require("express");
 const app = express();
-
-
-// // create db 
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:/myApp');
-const db = mongoose.connection;
-
-// // stock model
-const Stock = require('./models/Stock');
-const seed = require('./seed');
-const sentiment = require('./sentiment');
-
-// nasdaq feedparser
-
-const feedparser = require('./feedparser');
+const cfenv = require("cfenv");
+const bodyParser = require('body-parser')
+const watson = require("watson-developer-cloud");
+const vcapServices  = require("vcap_services");
 
 
 
-// middleware
-
-app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, 'views'));
-const appEnv = cfenv.getAppEnv();
-
-app.use(express.static(__dirname + '/public'));
-app.use(express.static(path.join(__dirname, 'bower_components')))
-app.use(bodyParser());
+var TradeoffAnalyticsV1 = require('watson-developer-cloud/tradeoff-analytics/v1');
+var tradeoff_analytics = new TradeoffAnalyticsV1({
+  username: '89002305-ec10-4eb3-ace3-ea1538f73ffb',
+  password: '1YjfEmCit4Cm'
+});
 
 
-// seed.seedDatabase();
-// sentiment.getSentiment("58ba2b1195244e589eedcefb");
-// sentiment.getSentiment("58ba2b1195244e589eedcefc");
-// sentiment.getSentiment("58ba2b1195244e589eedcefd");
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+//serve static file (index.html, images, css)
+app.use(express.static(__dirname + '/views'));
 
 
-// sentiment.resetSentiment("58ba2b1195244e589eedcefb");
-// sentiment.resetSentiment("58ba2b1195244e589eedcefc");
-// sentiment.resetSentiment("58ba2b1195244e589eedcefd");
 
 
-const urls = [
-    "http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=IBM",
-    "http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=AAPL",
-    "http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=MSFT"
-];  
-
-Promise.all([
-    feedparser.getFeed("http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=IBM"),
-    feedparser.getFeed("http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=AAPL"),
-    feedparser.getFeed("http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=MSFT")
-]).then((feeds) => {
-    console.log(feeds.length);
-    // feeds.forEach(function(feed) {
-    //     console.log(feed);
-    //     console.log("---------------");
-    //     console.log("\n\n\n\n\n\n\n\n\n\n");
-    //     console.log("---------------");
-    // });
-})
-
-// let feed = feedparser.getFeed();
-
-// let articles = feed.then((content)=> {
-//     return new Promise((resolve, reject) => {
-//         let contentArray = []
-//         console.log("got the feed");
-//         content.forEach(function(article) {
-//             contentArray.push(article.link);
-//         });
-//         resolve(contentArray);
-//     });
-// });
-
-// let articlesAsObject = articles.then((links) => {
-//     return new Promise((resolve, reject) => {
-//         let objectArray = []
-//         links.forEach(function(l) {
-//             objectArray.push({
-//                 url: l
-//             });
-//         });
-//         resolve(objectArray);
-//     });
-// });
 
 
-// let sentimentAnalysis = articlesAsObject.then((linkObjects) => {
-//     let aSlice = linkObjects.slice(1,4);
-//     sentiment.multipleSentiments(aSlice);
+
+
+// tradeoff_analytics.dilemmas(params,(err, resolution) => {
+//   if(err) {
+//     console.log(err);
+//   }
+//   else {
+//     console.log(JSON.stringify(resolution, null, 2));
+//   }
 // })
 
 
+// console.log(JSON.stringify(params, null, 2));
 
 
-app.get('/', (req, response) =>{ 
-
+app.get('/', (req, res) => {
+  response.send("hello");
+  return;
 });
 
-app.listen(3000, () => {
-    console.log("listening on port 3000");
+
+
+
+const port = process.env.PORT || 3000
+
+app.listen(port, function() {
+    console.log("To view your app, open this link in your browser: http://localhost:" + port);
 });
