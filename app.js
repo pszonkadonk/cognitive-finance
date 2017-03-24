@@ -8,10 +8,7 @@ const vcapServices  = require("vcap_services");
 
 
 var TradeoffAnalyticsV1 = require('watson-developer-cloud/tradeoff-analytics/v1');
-var tradeoff_analytics = new TradeoffAnalyticsV1({
-  username: '89002305-ec10-4eb3-ace3-ea1538f73ffb',
-  password: '1YjfEmCit4Cm'
-});
+
 
 
 
@@ -30,14 +27,14 @@ app.use(express.static(__dirname + '/views'));
 
 
 
-// tradeoff_analytics.dilemmas(params,(err, resolution) => {
-//   if(err) {
-//     console.log(err);
-//   }
-//   else {
-//     console.log(JSON.stringify(resolution, null, 2));
-//   }
-// })
+tradeoff_analytics.dilemmas(params,(err, resolution) => {
+  if(err) {
+    console.log(err);
+  }
+  else {
+    console.log(JSON.stringify(resolution, null, 2));
+  }
+})
 
 
 // console.log(JSON.stringify(params, null, 2));
