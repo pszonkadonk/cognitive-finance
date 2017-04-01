@@ -3,13 +3,15 @@ const bodyParser = require('body-parser');
 const app = express();
 const router = express.Router();
 const configRoutes = require('./routes');
-const ejs = require('ejs');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
 
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(router);
+app.use(passport.initialize());
+
 
 // parse application/json
 app.use(bodyParser.json())
@@ -18,19 +20,40 @@ app.use(express.static(__dirname + '/views'));
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/bower_components'));
 
+// authentication
+app.use(passport.initialize());
+
+
 // view engine
 
-app.set('view engine', 'ejs')
+const exphbs = require('express-handlebars');
+const Handlebars = require('handlebars');
 
+const handlebarInstance = exphbs.create({
+    defaultLayout: 'main',
+    helpers: {
+        asJSON: (obj, spacing) => {
+            if(typeof spacing == 'number') 
+                return new Handlebars.SafeString(JSON.stringify(obj, null, spacing))
+
+            return new Handlebars.SafeString(JSON.stringify(obj));
+        }
+    }
+});
+
+app.engine('handlebars', handlebarInstance.engine);
+app.set('view engine', 'handlebars');
+
+
+//routes
 configRoutes(app);
 
-// router.get('/', (req, res) => {
-//   res.render('index');
-// });
 
-// router.get('/user', (req, res) => {
-//   res.render('user_login');
-// });
+
+//authentication
+
+
+
 
 
 const port = process.env.PORT || 3000
