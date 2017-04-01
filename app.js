@@ -1,51 +1,36 @@
 const express = require("express");
+const bodyParser = require('body-parser');
 const app = express();
-const cfenv = require("cfenv");
-const bodyParser = require('body-parser')
-const watson = require("watson-developer-cloud");
-const vcapServices  = require("vcap_services");
-
-
-
-var TradeoffAnalyticsV1 = require('watson-developer-cloud/tradeoff-analytics/v1');
-
+const router = express.Router();
+const configRoutes = require('./routes');
+const ejs = require('ejs');
 
 
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(router);
 
 // parse application/json
 app.use(bodyParser.json())
 //serve static file (index.html, images, css)
 app.use(express.static(__dirname + '/views'));
+app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/bower_components'));
 
+// view engine
 
+app.set('view engine', 'ejs')
 
+configRoutes(app);
 
+// router.get('/', (req, res) => {
+//   res.render('index');
+// });
 
-
-
-
-tradeoff_analytics.dilemmas(params,(err, resolution) => {
-  if(err) {
-    console.log(err);
-  }
-  else {
-    console.log(JSON.stringify(resolution, null, 2));
-  }
-})
-
-
-// console.log(JSON.stringify(params, null, 2));
-
-
-app.get('/', (req, res) => {
-  response.send("hello");
-  return;
-});
-
-
+// router.get('/user', (req, res) => {
+//   res.render('user_login');
+// });
 
 
 const port = process.env.PORT || 3000
